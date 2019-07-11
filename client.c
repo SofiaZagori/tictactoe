@@ -10,7 +10,7 @@
 #include<signal.h>
 
 static void handler(int sig);
-void init_grid(char grid[3][3]);	//arxikopoihsh pinaka
+void init_grid(char grid[3][3]);	//initialization of array 
 void show_game(char grid[3][3], int game, int wins1, int wins2 ,int draws);
 void next_move(char grid[3][3], int *x, int *y, int player);
 int check_for_winner(char grid[3][3],int player);
@@ -49,8 +49,8 @@ int main(int argc,const char *argv[])
 		init_grid(grid);
 		show_game(grid,game,wins1,wins2,draws);
 
-		while(turns<=9 && flag==-1){ //dhladh den exoyme kapoion prowro nikhth
-			if(turns%2==1){		//an o gyros einai perittos paizei o player1 
+		while(turns<=9 && flag==-1){  //while we don't have an early winner 
+			if(turns%2==1){		//if the number of the round is odd, it's  player1's turn  
 				next_move(grid, &x, &y, 1);
 				printf("after next_move");
 //--------------------SEND SOCKET POS TO SERVER-------------------------------------------------
@@ -85,12 +85,12 @@ int main(int argc,const char *argv[])
 		}
 
 		//printf("\n\n new game?(y/n) \n");
-		//scanf(" %c",&ans); //valame space gia na mhn parei to enter ws xarakthra 9:29
+		//scanf(" %c",&ans); //a space added so the enter is not taken as a character
 
 
 		printf("\n\n if you want the game to stop completely, click Ctrl+c \n");
 
-  // STELNOUME SHMA
+  // we send the signal
 
  void handler(int sig) {
 	write(STDOUT_FILENO,"\n Caught signal for Ctrl+C \n",11);
@@ -98,7 +98,7 @@ int main(int argc,const char *argv[])
 	printf("\n\n give 1 \n");
 	scanf("%d",&click); 
 
-	send(sock, &click, sizeof(int), 0);    // ayto to stelnoyme ston server
+	send(sock, &click, sizeof(int), 0);    // we send that to the server
 
 }
 
@@ -107,7 +107,7 @@ int main(int argc,const char *argv[])
     	act.sa_handler = handler;
     	sigaction(SIGINT,&act,NULL);
     
-    	while (1) {	// Mia megali paysh gia na anathesoume ena signal sthn diadikasia mas
+    	while (1) {	// A big pause to assign a signal to our process
     		pause();
     	}
 
@@ -122,7 +122,7 @@ int main(int argc,const char *argv[])
 
 }
 
-// EDW KSEKINANE OI SYNARTHSEIS
+// FUNCTIONS START
 
 
 
@@ -234,7 +234,7 @@ int check_for_winner(char grid[3][3],int player){
 		if(s==grid[i][j] && grid[i][j]!=' '){
 			counter++;
 		}
-		j--; //gia na diasxizei thn diaagwnio kathws proxwra grammes 
+		j--; //to check the diagonal lines, as the lines progress 
 	}
 	if(counter==2){
 		return player;
